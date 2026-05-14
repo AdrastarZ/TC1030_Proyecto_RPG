@@ -6,3 +6,7 @@ El programa permite unicamente al usuario hacer una serie de selecciones mediant
 
 ## Casos a tomar en cuenta
 Hay que tomar en cuenta principalmente el input del usuario. Sabiendo que la forma en como se pondra en marcha el programa es mediante los numeros que provee el usuario, habra que añadir una función para que en caso de que se inserte algun número o caracter que no esta previsto, se le pida al usuario que lo intente de nuevo con un número válido
+
+Otro caso a tomar en cuenta es la implementación erronea de la habilidad de curación del Jugador, si no se llega a poner un limite a la salud maxima de este, al aplicar la curación se podria exceder la vida limite que estaba planeado.
+
+
