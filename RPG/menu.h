@@ -37,7 +37,6 @@ class Menu{
 string Menu::darNombres(){
     string nombre = "";
     char respuesta;
-    cout << "!!Bienvenido, oh gran guerrero!!" << endl << "Dime, Cual es tu nombre?" << endl << endl;
     
     do
     {
