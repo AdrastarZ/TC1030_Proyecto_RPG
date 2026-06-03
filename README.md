@@ -26,10 +26,10 @@ El programa permite unicamente al usuario hacer una serie de selecciones mediant
 --- 
 
 ## Casos que hacen que el programa deje de funcionar(Solucionados)
-| Situación | Efecto |
-|---|---|
-| Escribir una numero una cadena de texto | Al entrar un valor numérico en darNombres el bucle do while entra en ciclo infinito. Para solucionarlo se añadio la función isalpha para verificar que el valor sea alfa numérico e igualar el valor dado a un string vacio |
-| Insertar un valor numérico que no este en el rango | El metodo seleccionarAccion espera un valor entre 1 a 5, de no ser insertado uno de estos valores, el bucle do while se convierte en un ciclo infinito. Para solucionarlo se implementaron multiples if para recibir de manera adecuada los casos correctos, igual que los incorrectos |
+| Situación | Efecto | Solución |
+|---|---|---|
+| Escribir una numero una cadena de texto | Al entrar un valor numérico en darNombres el bucle do while entra en ciclo infinito | Para solucionarlo se añadio la función isalpha para verificar que el valor sea alfa numérico e igualar el valor dado a un string vacio |
+| Insertar un valor numérico que no este en el rango | El metodo seleccionarAccion espera un valor entre 1 a 5, de no ser insertado uno de estos valores, el bucle do while se convierte en un ciclo infinito | Para solucionarlo se implementaron multiples if para recibir de manera adecuada los casos correctos, igual que los incorrectos |
 
 
 
