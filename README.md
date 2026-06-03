@@ -1,4 +1,4 @@
-# RPG_POO
+# TC1030_Proyecto_RPG
 Este proyecto busca crear una simulación simple de un juego de rol por turnos (TBRPG) entre 2 entidades o clases. Las estructuras principales son el Menu y la Pelea, estas dos sirven para: seleccionar dificultad, organizar el orden de turnos, e informar y seleccionar de acciones que realizan los Personajes, respectivamente. Los Personajes se dividen en 2, el Jugador y el Enemigo. Ambos cuentan con puntos de vida, pueden atacar y defender. El Jugador puede utilizar una función extra para curarse vida, mientras que el Enemigo puede realizar un super ataque para infligir más daño. La vida, ataque y defensa del Jugador y la vida del Enemigo son constantes, mientras que el daño, defensa y super ataque del Enemigo varian dependiendo del nivel de dificultad que sea seleccionado al inicio en el Menu. Cuando los puntos de vida del Jugador o el Enemigo llega a 0 se termina la Pelea.
 
 ## Funcionalidad
