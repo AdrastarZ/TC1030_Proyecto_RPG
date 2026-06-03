@@ -23,6 +23,8 @@ Este proyecto busca crear una simulación simple de un juego de rol por turnos (
 ## Funcionalidad
 El programa permite unicamente al usuario hacer una serie de selecciones mediante el uso del teclado, esto para crear un nombre, configurar la dificultad y seleccionar las acciones del Jugador
 
+--- 
+
 ## Casos que hacen que el programa deje de funcionar (Solucionados)
 | Situación | Efecto |
 |---|---|
