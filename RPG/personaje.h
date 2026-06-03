@@ -1,14 +1,27 @@
+/*
+ * Proyecto RPG main
+ * Axel Daniel Ramírez Silva
+ * A01704206
+ * 11/06/2026
+ *
+ * La clase personaje se encarga de definir los atributos y metodos principales que
+ * heredan las clases jugador y enemigo, y ambos tiene sus propios metodos y atributos
+ * para definir y diferenciar ambas clases
+ */
+
 #ifndef PERSONAJE_H_ 
 #define PERSONAJE_H_ 
 
 #include <string>
 #include <random>
-#include <cmath>
+#include <cmath> //Ocupo ceil() para redondear variables hacia arriba
 
 using namespace std;
 
+// Declaración de clase abstracta Personaje
 class Personaje {
 
+    // Atributos que seran heredados por las hijas
     protected:
     string nombre;
     int ataque;
@@ -16,8 +29,9 @@ class Personaje {
     int especial;
     int vida;
 
+    // Metodos que seran heredados
     public:
-    Personaje(): nombre("Default"), ataque(0), defensa(0), especial(0) {};
+    Personaje(): nombre("Default"), ataque(0), defensa(0), especial(0) {}; //Constructor default
     Personaje(string nom, int atk, double def, int special) : nombre(nom), ataque(atk), defensa(def), especial(special), vida(100){};
     virtual ~Personaje(){}
 
@@ -36,24 +50,25 @@ class Personaje {
     void setEspecial(int special)  {especial = special;}
     int getEspecial()  {return especial;}
 
-
+    // Declaracion de metodos abstractos
     virtual double dano() = 0;
     virtual double bloqueo() = 0;
     virtual int accionEspecial() = 0;
     virtual int recibirDano(int cantidad)=0;
     virtual int valorAleatorio()=0;
-    int probAtaque(){return 0;};
     
 };
 
-
+// Declaración de clase Jugador que hereda de Personaje
 class Jugador:public Personaje{
-// El heroe recibe un boost de ataque
+
+    // Atributos privados a la clase
     private:
     int critico;
 
+    // Declaración y sobreescritura de los metodos de la clase hija
     public:
-    Jugador(): Personaje("Heroe", 0, 0.0, 0 ) {};
+    Jugador(): Personaje("Heroe", 0, 0.0, 0 ) {}; //Constructor default
     Jugador(string nombre, int ataque, double defensa, int special, int crit) : Personaje( nombre,  ataque,  defensa,  special), critico(crit){};
 
     void setCritico(int crit)  {critico = crit;}
@@ -69,6 +84,17 @@ class Jugador:public Personaje{
 
 };
 
+
+/**
+ * valorAleatorio: Jugador
+ *
+ * Genera un numero aleatorio entre el 1 al 10 y lo devuelve
+ * Utiliza la libreria random y el motor mt19937
+ * 
+ * Este valor es utilizado para definir una cualidad del
+ * metodo dano del Jugador
+ */
+
 int Jugador::valorAleatorio(){
     int minimo = 1;
     int maximo = 10;
@@ -81,11 +107,17 @@ int Jugador::valorAleatorio(){
 }
 
 
+/**
+ * dano: Jugador
+ *
+ * Devuelve el valor del ataque del Jugador.
+ * Si el metodo de valor aleatorio es igual a 10 se triplica el daño, un golpe crítico
+ */
 
 double Jugador::dano(){
     int golpeCritico = valorAleatorio();
     if(golpeCritico == 10){
-        cout << "!!Un golpe critico!!";
+        cout << "!!Un golpe critico!! ";
         return ataque*critico;
     }
     else {
@@ -93,11 +125,28 @@ double Jugador::dano(){
     }
 }
 
+
+/**
+ * bloqueo: Jugador
+ *
+ * Devuelve el valor de la defensa del Jugador multiplicado por 1.5
+ * Luego es redondeado al entero mas grande
+ */
+
 double Jugador::bloqueo(){
     double diff = defensa*1.5;
     defensa =  ceil(diff);
     return 0;
 }
+
+
+/**
+ * accionEspecial: Jugador
+ *
+ * Suma la vida actual del Jugador con el valor designado de especial
+ * 
+ * Si la suma de vida y especial llega a superar 100 el maximo valor que puede alcanzar la suma es 100
+ */
 
 int Jugador::accionEspecial(){
     if((vida+especial) > 100){
@@ -109,6 +158,15 @@ int Jugador::accionEspecial(){
     return 0;
 }
 
+
+/**
+ * recibirDano: Enemigo
+ *
+ * Dependiendo de la cantidad de daño que reciba el parametro cantidad se le resta el parametro cantidad a la vida.
+ * Si resulta el parametro ser menor que la defensa, para evitar valores negativos o 0 el daño minimo es 1. 
+ * 
+ * Si en algun punto la vida del Jugador llega a ser menor a 0, esta se restablece hasta 0 para evitar negativos
+ */
 
 int Jugador::recibirDano(int cantidad){
 
@@ -128,9 +186,12 @@ int Jugador::recibirDano(int cantidad){
     return vida;
 }
 
+
+// Declaración de clase Enemigo que hereda de Personaje
 class Enemigo:public Personaje{
-// El enemigo cambia las estadisticas segun su dificultad
+    // La clase no requiere de nuevos atributos, todo lo que necesita es heredado
     
+    // Declaración y sobreescritura de los metodos de la clase hija
     public:
     Enemigo(): Personaje("Enemigo", 0, 0.0,0) {};
     Enemigo(string nombre, int ataque, double defensa, int special) : Personaje( nombre,  ataque,  defensa,  special) {};
@@ -145,6 +206,16 @@ class Enemigo:public Personaje{
 
 };
 
+
+/**
+ * valorAleatorio: Enemigo
+ *
+ * Genera un numero aleatorio entre el 1 al 100 y lo devuelve
+ * Utiliza la libreria random y el motor mt19937
+ * 
+ * Este valor es utilizado para definir la probabilidad de que el enemigo realice una de las 3 acciones disponibles
+ */
+
 int Enemigo::valorAleatorio(){
     int minimo = 1;
     int maximo = 100;
@@ -156,21 +227,54 @@ int Enemigo::valorAleatorio(){
     return numAleatorio;
 }
 
+
+/**
+ * dano: Enemigo
+ *
+ * Devuelve el valor del ataque del Jugador.
+ */
+
 double Enemigo::dano() {return ataque;}
+
+
+/**
+ * bloqueo: Enemigo
+ *
+ * Devuelve el valor de la defensa del Jugador multiplicado por 1.5
+ * Luego es redondeado al entero mas grande
+ */
 
 double Enemigo::bloqueo(){
     double diff = defensa*1.5;
     defensa =  ceil(diff);
     return 0;
 }
+
+
+/**
+ * accionEspecial: Enemigo
+ *
+ * Devuelve el valor del ataque especial
+ */
+
 int Enemigo::accionEspecial() {return especial;}
+
+
+/**
+ * probAtaque
+ *
+ * Llama al metodo valorAleatorio, dependiendo de su resultado devuelve un valor entero, estos valores representan una de las 3 acciones posibles
+ * 1. Atacar: 45% de probabilidad de ocurrir
+ * 2. Bloquear: 45% de probabilidad de ocurrir
+ * 3. Especial: 10% de probabilidad de ocurrir
+ */
 
 int Enemigo::probAtaque(){ 
     int probabilidad = valorAleatorio();
     if(probabilidad >= 1 && probabilidad <= 45){
         return 1;
     }
-    else if(probabilidad >= 45 && probabilidad <= 90){
+    else if(probabilidad > 45 && probabilidad <= 90){
         return 2;
     }
     else{
@@ -178,6 +282,17 @@ int Enemigo::probAtaque(){
     }
 
 }
+
+
+/**
+ * recibirDano: Enemigo
+ *
+ * Dependiendo de la cantidad de daño que reciba el parametro cantidad se le resta el parametro cantidad a la vida.
+ * Si resulta el parametro ser menor que la defensa, para evitar valores negativos o 0 el daño minimo es 1. 
+ * 
+ * Si en algun punto la vida del Jugador llega a ser menor a 0, esta se restablece hasta 0 para evitar negativos
+ */
+
 int Enemigo::recibirDano(int cantidad){
 
     if(cantidad <= defensa){
@@ -188,11 +303,9 @@ int Enemigo::recibirDano(int cantidad){
         vida = vida - (cantidad - defensa);
     }
 
-    
     if(vida <= 0){
         vida = 0;
     }
-    
     return vida;
 }
 
