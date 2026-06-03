@@ -1,38 +1,67 @@
+/*
+ * Proyecto RPG main
+ * Axel Daniel Ramírez Silva
+ * A01704206
+ * 11/06/2026
+ *
+ * La clase menu es con lo que el usuario principalmente interactua cuando el programa corre,
+ * siendo la salida de consola, esperando una entrada de dato.
+ * 
+ * Esta clase se encarga de definir nombres, dificultad, y preparar las clases hijas de Jugador y
+ * Enemigo con los dos parametros pasados para ponerlos en la memoria dinámica
+ */
+
 #ifndef MENU_H_
 #define MENU_H_
 
 #include <iostream>
-#include <random>
-#include <cctype>
-#include "personaje.h"
+#include <cctype> //Biblioteca usada para comprobar uso de caracteres alfa numéricos
+
+#include "personaje.h" //Biblioteca con objetos de mi proyecto
 
 
 
 using namespace std;
 
+//Declaración de la clase menu
 class Menu{
+
+    // Declaración de atributos privados
     private:
     int dificultad;
-    Personaje *jugador;
-    Personaje *enemigo;
 
+    // Se declaran punteros de las clases hijas
+    Jugador *jugador;
+    Enemigo *enemigo;
+
+    // Declaración de metodos públicos
     public:
 
     Menu(){}
-    ~Menu(){ delete jugador; delete enemigo;}
+    ~Menu(){ delete jugador; delete enemigo;} // Destruimos los atributos jugador y enemigo para evitar fallos en memoria
 
     void setDificultad(int diff){ dificultad = diff;}
     int getDificultad(){ return dificultad;}
 
-    Personaje *getJugador(){return jugador;}
-    Personaje *getEnemigo(){return enemigo;}
+    Jugador *getJugador(){return jugador;}
+    Enemigo *getEnemigo(){return enemigo;}
 
     string darNombres();
     int seleccionarDiff();
     void creaPeleadores();
-    int seleccionarAccion();
 
 };
+
+/**
+ * darNombres
+ *
+ * Pide al usuario que inserte un nombre
+ * 
+ * Para evitar problemas de compilación, lógica o con loops, se pusieron parametros para limitar lo que el usuario puede poner.
+ * Tiene un maximo de 10 caracteres, debe tener un minimo de un caracter, no puede tener numeros, espacios, ni caracteres especiales.
+ * 
+ * Al final se le pregunta al usuario si esta satisfecho con su selección de ser así el programa continua, sino vuelve a preguntar por el nombre. 
+ */
 
 string Menu::darNombres(){
     string nombre = "";
@@ -91,29 +120,51 @@ string Menu::darNombres(){
     return nombre;
 }
 
+
+/**
+ * seleccionarDiff
+ *
+ * Pide al usuario una entrada numérica del 1 al 5, dependiendo de la entrada es la dificultad que se selecciona para jugar
+ * 
+ * Si se inserta un valor que no es el indicado, se reiniciara el ciclo hasta que la entrada sea una de las solicitadas
+ * 
+ */
+
 int Menu::seleccionarDiff(){
     string diff = "";
     do
     {
         cout << endl << "Presiona una tecla numerica del 1 al 4 para seleccionar el nivel de dificultad : " << endl;
-        cout << "1. Facil\t2. Normal\t3. Dificil\t4. Imposible"<< endl;
+        cout << "1. Facil\t2. Normal\t3. Dificil\t4. Muy dificil\t\t5. Heartless"<< endl;
         getline(cin,diff);
         cout << endl;
 
-        if(diff != "1" && diff != "2" && diff != "3" && diff != "4"){
+        if(diff != "1" && diff != "2" && diff != "3" && diff != "4" && diff != "5"){
             cout << endl << "La dificultad que seleccionaste no es valida. Intente de nuevo" << endl;          
             diff = "";
         }
         else if(diff == "1") {dificultad = 1; diff = "Facil"; cout << "Has seleccionado la dificultad: " << diff; return dificultad;}
         else if(diff == "2") {dificultad = 2; diff = "Normal"; cout << "Has seleccionado la dificultad: " << diff; return dificultad;}
         else if(diff == "3") {dificultad = 3; diff = "Dificil"; cout << "Has seleccionado la dificultad: " << diff; return dificultad;}
-        else{dificultad = 4; diff = "Imposible"; cout << "Has seleccionado la dificultad: " << diff << endl << "!!Buena suerte!!"; return dificultad;}
+        else if(diff == "4") {dificultad = 4; diff = "Muy dificil"; cout << "Has seleccionado la dificultad: " << diff; return dificultad;}
+        else{dificultad = 5; diff = "Heartless"; cout << "Has seleccionado la dificultad: " << diff << endl << "!!Buena suerte!!"; return dificultad;}
         
 
-    } while (diff != "Facil" && diff != "Normal" && diff != "Dificil" && diff != "Imposible");
+    } while (diff != "Facil" && diff != "Normal" && diff != "Dificil" && diff != "Muy Dificil" && diff != "Heartless");
 
     return 0;
 }
+
+
+/**
+ * creaPeleadores
+ *
+ * Llama al metodo darNombres 2 veces, unos para darle un nombre al Jugador, otro al Enemigo
+ * Llama al metodo seleccionarDiff para modificar las estadisticas de las acciones del jugador dependiendo de lo que se escogio anteriormente
+ * 
+ * Crea los objetos de las clases, el Jugador con estadisticas que predefinidas, las del Enemigo varian segun la dificultad 
+ * 
+ */
 
 void Menu::creaPeleadores(){
     string nombreJug = darNombres();
@@ -121,7 +172,7 @@ void Menu::creaPeleadores(){
     string nombreEn = darNombres();
     int dificultad = seleccionarDiff();
 
-    jugador = new Jugador(nombreJug, 30, 20.0, 30, 3);
+    jugador = new Jugador(nombreJug, 30, 20.0, 30, 3); // Nombre, ataque, defensa, curación, critico
 
     enemigo = new Enemigo();
 
@@ -130,26 +181,31 @@ void Menu::creaPeleadores(){
     switch (dificultad)
     {
     case 1:
-        enemigo->setAtaque(20);
+        enemigo -> setAtaque(20);
         enemigo -> setDefensa(5);
-        enemigo ->setEspecial(30);
+        enemigo -> setEspecial(30);
         break;
-
     case 2:
-        enemigo->setAtaque(25);
+        enemigo -> setAtaque(25);
         enemigo -> setDefensa(10);
-        enemigo ->setEspecial(35);
+        enemigo -> setEspecial(35);
         break;
     case 3:
-        enemigo->setAtaque(30);
+        enemigo -> setAtaque(30);
         enemigo -> setDefensa(15);
-        enemigo ->setEspecial(40);
+        enemigo -> setEspecial(40);
         break;
     case 4:
-        enemigo->setAtaque(40);
+        enemigo -> setAtaque(40);
         enemigo -> setDefensa(25);
-        enemigo ->setEspecial(50);
+        enemigo -> setEspecial(50);
         break;
+    case 5:
+        enemigo -> setAtaque(50);
+        enemigo -> setDefensa(25);
+        enemigo -> setEspecial(70);
+        break;
+
     default:
     cout << "Ocpion no valida";
         break;
@@ -158,21 +214,4 @@ void Menu::creaPeleadores(){
    
 };
 
-int Menu::seleccionarAccion(){
-    string opcion = "";
-    do
-    { 
-        cout << "Que vas a hacer?" << endl << "1. Atacar\t2. Bloquear\t3.Curarse" << endl << "Presiona una tecla numerica del 1 al 3 para seleccionar tu accion: ";
-        getline(cin, opcion);
-        cout << endl;
-
-        if(opcion == "1") {cout << "Haz decidido atacar: "; return 1;}
-        else if(opcion == "2") {cout << "Haz decidido defenderte: "; return 2;}
-        else if(opcion == "3") {cout << "Haz decidido curarte: "; return 3;}
-        else{cout << endl << "La accion que seleccionaste no es valida. Intente de nuevo" << endl; opcion = "";}
-
-    } while (opcion != "1" && opcion != "2" && opcion != "3");
-    return 0;
-
-}
 #endif  
