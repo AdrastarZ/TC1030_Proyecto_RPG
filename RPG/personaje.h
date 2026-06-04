@@ -50,7 +50,8 @@ class Personaje {
     void setEspecial(int special)  {especial = special;}
     int getEspecial()  {return especial;}
 
-    // Declaracion de metodos abstractos
+    // Declaracion de metodos virtuales
+    virtual int elegirAccion() = 0; // Sobrecarga del metodo elegirAccion para usarlo en la clase Jugador con parametro 
     virtual double dano() = 0;
     virtual double bloqueo() = 0;
     virtual int accionEspecial() = 0;
@@ -65,14 +66,14 @@ class Jugador:public Personaje{
     // Atributos privados a la clase
     private:
     int critico;
+    int curacionesUsadas;
 
     // Declaración y sobreescritura de los metodos de la clase hija
     public:
     Jugador(): Personaje("Heroe", 0, 0.0, 0 ) {}; //Constructor default
-    Jugador(string nombre, int ataque, double defensa, int special, int crit) : Personaje( nombre,  ataque,  defensa,  special), critico(crit){};
+    Jugador(string nombre, int ataque, double defensa, int special, int crit, int usos) : Personaje( nombre,  ataque,  defensa,  special), critico(crit), curacionesUsadas(usos){};
 
-    void setCritico(int crit)  {critico = crit;}
-    int getCritico() {return critico;}
+    int elegirAccion() override;
 
     int valorAleatorio() override;
 
@@ -83,6 +84,43 @@ class Jugador:public Personaje{
     int recibirDano(int cantidad) override;
 
 };
+
+/**
+ * seleccionarAccion: Jugador
+ * 
+ * Se le permite seleccionar al jugador 1 de 3 acciones y devuelve un número acordea a esa acción seleccionada
+ * 
+ * Si la opción que selecciono no es valida pide de nuevo una entrada de dato
+ */
+
+int Jugador::elegirAccion(){
+    string opcion = "";
+    do
+    { 
+        cout << endl << "Que vas a hacer?" << endl << "1. Atacar: 10'%' de probabilidad de golpe critico" << endl << 
+        "2. Bloquear: Aumenta en un 50'%' tu defensa por 1 turno" << endl << 
+        "3. Curarse: Cura 30 puntos de salud, no excede salud maxima de 100, limite de 3 curaciones " 
+        << endl << "Presiona una tecla numerica del 1 al 3 para seleccionar tu accion: ";
+
+        getline(cin, opcion);
+        cout << endl;
+
+        
+        if(curacionesUsadas >= 3 && opcion == "3"){
+            cout << "!! Te quedaste sin fuerzas para curarte !!" << endl << "Realiza otra accion" <<endl;
+            opcion = "";
+        }
+        else{
+            if(opcion == "1") {cout << "Haz decidido atacar: "; return 1;}
+            else if(opcion == "2") {cout << "Haz decidido defenderte: "; return 2;}
+            else if(opcion == "3") {curacionesUsadas++; cout << "Haz decidido curarte: "; return 3;}
+            else{cout << endl << "La accion que seleccionaste no es valida. Intente de nuevo" << endl; opcion = "";}
+        }
+        
+    } while (opcion != "1" && opcion != "2" && opcion != "3");
+
+    return 0;
+}
 
 
 /**
@@ -198,7 +236,7 @@ class Enemigo:public Personaje{
 
 
     int valorAleatorio() override;
-    int probAtaque();
+    int elegirAccion() override;
     double dano() override;
     double bloqueo() override;
     int accionEspecial() override;
@@ -261,7 +299,7 @@ int Enemigo::accionEspecial() {return especial;}
 
 
 /**
- * probAtaque
+ * elegirAccion: Enemigo
  *
  * Llama al metodo valorAleatorio, dependiendo de su resultado devuelve un valor entero, estos valores representan una de las 3 acciones posibles
  * 1. Atacar: 45% de probabilidad de ocurrir
@@ -269,7 +307,7 @@ int Enemigo::accionEspecial() {return especial;}
  * 3. Especial: 10% de probabilidad de ocurrir
  */
 
-int Enemigo::probAtaque(){ 
+int Enemigo::elegirAccion(){ 
     int probabilidad = valorAleatorio();
     if(probabilidad >= 1 && probabilidad <= 45){
         return 1;
