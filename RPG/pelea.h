@@ -31,13 +31,13 @@ class Pelea {
     int turno;
 
     // Se declaran punteros de las clases hijas para guardar mismo espacio de memoria que las declaradas en menu
-    Jugador *jugadorPrincipal;
-    Enemigo *enemigoPrincipal;    
+    Personaje *jugadorPrincipal;
+    Personaje *enemigoPrincipal;    
 
     // Declaración de metodos públicos
     public:
-    Pelea():turno(0){}
-    Pelea(int _turno, Jugador *_jugadorPrincipal, Enemigo* _enemigoPrincipal ):turno(_turno), jugadorPrincipal(_jugadorPrincipal), enemigoPrincipal(_enemigoPrincipal){}
+    Pelea():turno(0), jugadorPrincipal(nullptr), enemigoPrincipal(nullptr){}
+    Pelea(int _turno, Personaje *_jugadorPrincipal, Personaje* _enemigoPrincipal ):turno(_turno), jugadorPrincipal(_jugadorPrincipal), enemigoPrincipal(_enemigoPrincipal){}
 
     int getTurno(){return turno;}
     void setTurno(int turno){ this -> turno = turno;}
@@ -49,34 +49,6 @@ class Pelea {
 
 };
 
-/**
- * seleccionarAccion
- * 
- * Durante el turno del jugador se le permite seleccionar 1 de 3 acciones y devuelve un número acordea a esa acción seleccionada
- * 
- * Si la opción que selecciono no es valida pide de nuevo una entrada de dato
- */
-
-int Pelea::seleccionarAccion(int contador){
-    string opcion = "";
-    do
-    { 
-        cout << endl << "Que vas a hacer?" << endl << "1. Atacar: 10'%' de probabilidad de golpe critico" << endl << 
-        "2. Bloquear: Aumenta en un 50'%' tu defensa por 1 turno" << endl << 
-        "3. Curarse: Cura 30 puntos de salud, no excede salud maxima de 100, limite de 3 curaciones " 
-        << endl << "Presiona una tecla numerica del 1 al 3 para seleccionar tu accion: ";
-
-        getline(cin, opcion);
-        cout << endl;
-
-        if(opcion == "1") {cout << "Haz decidido atacar: "; return 1;}
-        else if(opcion == "2") {cout << "Haz decidido defenderte: "; return 2;}
-        else if(opcion == "3") {cout << "Haz decidido curarte: "; return 3;}
-        else{cout << endl << "La accion que seleccionaste no es valida. Intente de nuevo" << endl; opcion = "";}
-
-    } while (opcion != "1" && opcion != "2" && opcion != "3");
-    return 0;
-}
 
 /**
  * ejecutarTurno
@@ -102,17 +74,10 @@ void Pelea::ejecutarTurno(){
     double tempDifJugador = jugadorPrincipal -> getDefensa();
     double tempDifEnemigo = enemigoPrincipal -> getDefensa();
 
-    int contador = 1; //Se utiliza para contar el numero de usos que lleva la acción curación
-    bool confirmarSanacion;
 
     do
-    {
-        int accion;
-        confirmarSanacion = false;
-        Pelea partida;
-
-        
-        int probabilidad = enemigoPrincipal ->probAtaque();
+    { 
+        int probabilidad = enemigoPrincipal ->elegirAccion();
 
         turno++;
         cout << endl << "------------------- Turno: " << turno << " ------------------- " << endl << endl;
@@ -121,21 +86,7 @@ void Pelea::ejecutarTurno(){
 
         cout << "------------------- Turno de " << nomJugador << " -------------------" << endl;
 
-        // Se implemento esta sección para evitar que el Jugador utilice constantemente la acción de curación
-        // Obligandolo a ser mas estrategico
-        do
-        {
-            accion = partida.seleccionarAccion(contador);
-            if(accion == 3 && contador > 3){
-                cout << "!! Te quedaste sin fuerzas para curarte !!" << endl << "\t\t\t Realiza otra accion" <<endl;
-            }
-            else if(accion == 3 && contador <= 3 ) { contador ++; confirmarSanacion = true;}
-            else{
-                confirmarSanacion = true;
-            }
-        } while (!confirmarSanacion);
-        
-        
+        int accion = jugadorPrincipal -> elegirAccion();
 
         switch (accion)
         {
@@ -146,7 +97,7 @@ void Pelea::ejecutarTurno(){
             
             case 2:
                 jugadorPrincipal -> bloqueo();
-                cout << "La defensa de " << nomJugador << " incremento un 50%" << endl << "Defensa actual: " << jugadorPrincipal ->getDefensa() << endl << endl;
+                cout << endl << "La defensa de " << nomJugador << " incremento un 50%" << endl << "Defensa actual: " << jugadorPrincipal ->getDefensa() << endl << endl;
                 break;
             case 3: 
                 jugadorPrincipal -> accionEspecial();
@@ -179,7 +130,7 @@ void Pelea::ejecutarTurno(){
         case 2:
             cout << nomEnemigo << " decidio bloquear." << endl;
             enemigoPrincipal -> bloqueo();
-            cout << "La defensa de " << nomEnemigo << " incremento un 50%" << endl << "Defensa actual del enemigo: " << enemigoPrincipal ->getDefensa() << endl << endl;
+            cout << endl << "La defensa de " << nomEnemigo << " incremento un 50%" << endl << "Defensa actual del enemigo: " << enemigoPrincipal ->getDefensa() << endl << endl;
             break;
 
         case 3: 
