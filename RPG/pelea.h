@@ -45,8 +45,6 @@ class Pelea {
     void ejecutarTurno();
     void verificaGanador();
 
-    int seleccionarAccion(int contador);
-
 };
 
 
