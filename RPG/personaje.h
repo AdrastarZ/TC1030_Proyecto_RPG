@@ -51,7 +51,7 @@ class Personaje {
     int getEspecial()  {return especial;}
 
     // Declaracion de metodos virtuales
-    virtual int elegirAccion() = 0; // Sobrecarga del metodo elegirAccion para usarlo en la clase Jugador con parametro 
+    virtual int elegirAccion() = 0; 
     virtual double dano() = 0;
     virtual double bloqueo() = 0;
     virtual int accionEspecial() = 0;
