@@ -40,9 +40,6 @@ class Menu{
     Menu(){}
     ~Menu(){ delete jugador; delete enemigo;} // Destruimos los atributos jugador y enemigo para evitar fallos en memoria
 
-    void setDificultad(int diff){ dificultad = diff;}
-    int getDificultad(){ return dificultad;}
-
     Personaje *getJugador(){return jugador;}
     Personaje *getEnemigo(){return enemigo;}
 
