@@ -31,8 +31,8 @@ class Menu{
     int dificultad;
 
     // Se declaran punteros de las clases hijas
-    Jugador *jugador;
-    Enemigo *enemigo;
+    Personaje *jugador;
+    Personaje *enemigo;
 
     // Declaración de metodos públicos
     public:
@@ -43,8 +43,8 @@ class Menu{
     void setDificultad(int diff){ dificultad = diff;}
     int getDificultad(){ return dificultad;}
 
-    Jugador *getJugador(){return jugador;}
-    Enemigo *getEnemigo(){return enemigo;}
+    Personaje *getJugador(){return jugador;}
+    Personaje *getEnemigo(){return enemigo;}
 
     string darNombres();
     int seleccionarDiff();
@@ -172,11 +172,9 @@ void Menu::creaPeleadores(){
     string nombreEn = darNombres();
     int dificultad = seleccionarDiff();
 
-    jugador = new Jugador(nombreJug, 30, 20.0, 30, 3); // Nombre, ataque, defensa, curación, critico
+    jugador = new Jugador(nombreJug, 30, 20.0, 30, 3, 0); // Nombre, ataque, defensa, curación, critico, curaciones usadas
 
-    enemigo = new Enemigo();
-
-    enemigo -> setNombre(nombreEn);
+    enemigo = new Enemigo(nombreEn, 0, 0.0, 0);
 
     switch (dificultad)
     {
@@ -209,9 +207,7 @@ void Menu::creaPeleadores(){
     default:
     cout << "Ocpion no valida";
         break;
-    }
-    
-   
+    } 
 };
 
 #endif  
