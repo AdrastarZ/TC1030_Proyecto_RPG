@@ -19,8 +19,6 @@
 
 #include "personaje.h" //Biblioteca con objetos de mi proyecto
 
-
-
 using namespace std;
 
 //Declaración de la clase menu
@@ -52,14 +50,13 @@ class Menu{
 /**
  * darNombres
  *
- * Pide al usuario que inserte un nombre
- * 
+ * Pide al usuario que inserte un nombre.
  * Para evitar problemas de compilación, lógica o con loops, se pusieron parametros para limitar lo que el usuario puede poner.
  * Tiene un maximo de 10 caracteres, debe tener un minimo de un caracter, no puede tener numeros, espacios, ni caracteres especiales.
- * 
- * Al final se le pregunta al usuario si esta satisfecho con su selección de ser así el programa continua, sino vuelve a preguntar por el nombre. 
+ * Al final se le pregunta al usuario si esta satisfecho con su selección de ser así el programa continua, sino vuelve a preguntar por el nombre.
+ *  
+ * @return string El nombre validado e ingresado por el usuario de forma correcta.
  */
-
 string Menu::darNombres(){
     string nombre = "";
     char respuesta;
@@ -121,12 +118,11 @@ string Menu::darNombres(){
 /**
  * seleccionarDiff
  *
- * Pide al usuario una entrada numérica del 1 al 5, dependiendo de la entrada es la dificultad que se selecciona para jugar
+ * Pide al usuario una entrada numérica del 1 al 5, dependiendo de la entrada es la dificultad que se selecciona para jugar.
+ * Si se inserta un valor que no es el indicado, se reiniciara el ciclo hasta que la entrada sea una de las solicitadas.
  * 
- * Si se inserta un valor que no es el indicado, se reiniciara el ciclo hasta que la entrada sea una de las solicitadas
- * 
+ * @return int El número entero que representa la dificultad elegida (del 1 al 5).
  */
-
 int Menu::seleccionarDiff(){
     string diff = "";
     do
@@ -147,7 +143,7 @@ int Menu::seleccionarDiff(){
         else{dificultad = 5; diff = "Heartless"; cout << "Has seleccionado la dificultad: " << diff << endl << "!!Buena suerte!!"; return dificultad;}
         
 
-    } while (diff != "Facil" && diff != "Normal" && diff != "Dificil" && diff != "Muy Dificil" && diff != "Heartless");
+    } while (diff != "Facil" && diff != "Normal" && diff != "Dificil" && diff != "Muy dificil" && diff != "Heartless"); // Corregido "Muy dificil" para evitar bucle infinito
 
     return 0;
 }
@@ -158,11 +154,8 @@ int Menu::seleccionarDiff(){
  *
  * Llama al metodo darNombres 2 veces, unos para darle un nombre al Jugador, otro al Enemigo
  * Llama al metodo seleccionarDiff para modificar las estadisticas de las acciones del jugador dependiendo de lo que se escogio anteriormente
- * 
  * Crea los objetos de las clases, el Jugador con estadisticas que predefinidas, las del Enemigo varian segun la dificultad 
- * 
- */
-
+ * */
 void Menu::creaPeleadores(){
     string nombreJug = darNombres();
     cout << endl << "Cual es el nombre de tu enemigo?" << endl; 
@@ -207,4 +200,4 @@ void Menu::creaPeleadores(){
     } 
 };
 
-#endif  
+#endif
