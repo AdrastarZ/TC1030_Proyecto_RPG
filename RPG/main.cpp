@@ -26,7 +26,7 @@ int main(){
 
     Menu menu;
 
-    cout << "!!Bienvenido, oh gran guerrero!!" << endl << "Dime, Cual es tu nombre?" << endl << endl;
+    cout << endl << "!!Bienvenido, oh gran guerrero!!" << endl << "Dime, Cual es tu nombre?" << endl << endl;
     menu.creaPeleadores();
     Pelea partida(0, menu.getJugador(), menu.getEnemigo());
     partida.ejecutarTurno();
